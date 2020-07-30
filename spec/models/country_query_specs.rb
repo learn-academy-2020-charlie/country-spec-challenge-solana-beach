@@ -109,17 +109,29 @@ RSpec.describe "Practice with ActiveRecord", type: :model do
 
     it "can use order" do
       # Which country has the highest life expectancy?
+      country = Country
+        .order('lifeexpectancy DESC')
+        .limit(1)
+        .first
       expect(country.code).to eq('FLK')
     end
 
     it "can use order" do
       #Which is the smallest country by area
+      country = Country
+        .order(:surfacearea)
+        .limit(1)
+        .first
       expect(country.code).to eq('VAT')
 
     end
 
     it "can use order" do
       #which is the biggest country by area
+      country = Country
+        .order('surfacearea DESC')
+        .limit(1)
+        .first
       expect(country.code).to eq('RUS')
 
 
@@ -127,11 +139,19 @@ RSpec.describe "Practice with ActiveRecord", type: :model do
 
     it "can use order" do
       #Which is the smallest country by population
+      country = Country
+        .order('population')
+        .limit(1)
+        .first
       expect(country.code).to eq('ATA')
     end
 
     it "can use order" do
       #which is the biggest country by population
+      country = Country
+      .order('population DESC')
+      .limit(1)
+      .first
       expect(country.code).to eq('CHN')
 
     end
@@ -154,6 +174,11 @@ RSpec.describe "Practice with ActiveRecord", type: :model do
 
     it "can combine order and limit" do
       #Which five countries have the lowest population density?
+      country_names = Country
+        .order('population / surfacearea')
+        .limit(5)
+        .pluck(:name)
+
       expected = ["South Georgia and the South Sandwich Islands", "Bouvet Island", "Antarctica", "British Indian Ocean Territory", "Heard Island and McDonald Islands"]
 
       expected.map do |country|
@@ -164,6 +189,10 @@ RSpec.describe "Practice with ActiveRecord", type: :model do
 
     it "can combine order and limit" do
       #which five countries have the highest population density?
+      country_names = Country
+        .order('population / surfacearea DESC')
+        .limit(5)
+        .pluck(:name)
       expected = ["Macao", "Monaco", "Hong Kong", "Singapore", "Gibraltar"]
 
       expected.map do |country|
@@ -174,6 +203,11 @@ RSpec.describe "Practice with ActiveRecord", type: :model do
 
     it "can combine order and limit" do
       #Which are the 10 smallest countries by area?
+      countries = Country
+        .where.not(surfacearea: nil)
+        .order('surfacearea')
+        .limit(10)
+        .pluck(:name)
       expected = ["Holy See (Vatican City State)", "Monaco", "Gibraltar", "Tokelau", "Cocos (Keeling) Islands", "United States Minor Outlying Islands", "Macao", "Nauru", "Tuvalu", "Norfolk Island"]
       expected.map do |country|
         expect(countries).to include(country)
