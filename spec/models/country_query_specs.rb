@@ -70,12 +70,12 @@ RSpec.describe "Practice with ActiveRecord", type: :model do
     end
 
     it "can find records via multiple equality comparrisons" do
-      #List the countries in Africa that have a population smaller than 30,000,000 and a life expectancy of more than 45?
+      #List the countries in Africa that have a population greater than 30,000,000 and a life expectancy of more than 45?
       countries = Country
-      .where('population < 30000000')
+      .where('population > 30000000')
       .where('lifeexpectancy > 45')
       .where(continent: 'Africa')
-      expect(countries.count).to eq(37) #changed from 8 to 37s
+      expect(countries.count).to eq(8) 
    end
 
     it "can find records using wildcards" do
@@ -222,6 +222,8 @@ RSpec.describe "Practice with ActiveRecord", type: :model do
       countries = Country
         .order(:population)
         .limit(10)
+
+
       smallest_biggest = countries.min{|a,b| b.gnp <=> a.gnp}
 
       expect(smallest_biggest.name).to eq("Holy See (Vatican City State)")
@@ -229,6 +231,12 @@ RSpec.describe "Practice with ActiveRecord", type: :model do
 
     it "can simplify 'with' queries" do
       #Of the largest 10 countries by surfacearea, which has the smallest gnp?
+      countries = Country
+        .order('surfacearea DESC')
+        .limit(10)
+
+      smallest_biggest = countries.max{|a,b| b.gnp <=> a.gnp}
+
       expect(smallest_biggest.name).to eq("Antarctica")
     end
 
